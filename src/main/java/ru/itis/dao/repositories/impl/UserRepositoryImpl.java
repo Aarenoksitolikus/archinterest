@@ -1,22 +1,22 @@
 package ru.itis.dao.repositories.impl;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
 import ru.itis.dao.repositories.UserRepository;
+import ru.itis.dao.utils.JdbcUtil;
+import ru.itis.dao.utils.RowMapper;
 
-import javax.sql.DataSource;
+import java.sql.Connection;
+import java.util.List;
 
-public class UserRepositoryJdbcImpl implements UserRepository {
-    private final JdbcTemplate template;
+public class UserRepositoryImpl implements UserRepository {
 
-    private static final String SQL_SELECT_BY_ID = "select * from account where id = ?";
-    private static final String SQL_SELECT_BY_CREDENTIONALS = "select * from account where username = ? and password = ?";
-    private static final String SQL_UPDATE_BY_ID = "update account set name = ?, surname = ?, last_name = ? where id = ?)";
-    private static final String SQL_CREATE = "insert into account (username, password, registered_at) values (?, ?, now())";
+    private final Connection connection;
+    private final JdbcUtil<User> jdbcUtil;
 
-    public UserRepositoryJdbcImpl(DataSource dataSource) {
-        this.template = new JdbcTemplate(dataSource);
+    public UserRepositoryImpl(Connection connection) {
+        this.connection = connection;
+        this.jdbcUtil = new JdbcUtil<>();
     }
 
     private final RowMapper<User> userRowMapper = (row, number) -> User.builder()
@@ -25,28 +25,46 @@ public class UserRepositoryJdbcImpl implements UserRepository {
             .surname(row.getString("surname"))
             .lastname(row.getString("lastname"))
             .username(row.getString("username"))
+            .email(row.getString("email"))
             .password(row.getString("password"))
             .registeredAt(row.getTimestamp("registered_at").toLocalDateTime())
             .build();
 
-
     @Override
     public User get(Long id) {
-        return template.query(SQL_SELECT_BY_ID, userRowMapper, id).get(0);
+        String selectSql = "select * from account where id = %s";
+        selectSql = String.format(selectSql, id);
+        return jdbcUtil.selectOne(connection, selectSql, userRowMapper);
     }
 
     @Override
     public User get(String username, String password) {
-        return template.query(SQL_SELECT_BY_CREDENTIONALS, userRowMapper, username, password).get(0);
+        String selectSql = "select * from account where username = '%s' and password = '%s'";
+        selectSql = String.format(selectSql, username, password);
+        return jdbcUtil.selectOne(connection, selectSql, userRowMapper);
     }
 
     @Override
     public void update(User user) {
-        template.update(SQL_UPDATE_BY_ID, user.getName(), user.getSurname(), user.getLastname(), user.getId());
+        String updateSql = "update account set name = '%s', surname = '%s', last_name = '%s' where id = %s)";
+        updateSql = String.format(updateSql, user.getName(), user.getSurname(), user.getLastname(), user.getId());
+        JdbcUtil.execute(connection, updateSql);
+    }
+
+    @Override
+    public void update(User profile, List<Tag> tags) {
+        update(profile);
+        for (Tag tag : tags) {
+            String createSql = "insert into account_tags (account_id, tag_id) values (%s, %s)";
+            createSql = String.format(createSql, profile.getId(), tag.getId());
+            JdbcUtil.execute(connection, createSql);
+        }
     }
 
     @Override
     public void create(User user) {
-        template.update(SQL_CREATE, user.getUsername(), user.getPassword());
+        String createSql = "insert into account (username, email, password, registered_at) values ('%s', '%s', '%s', now())";
+        createSql = String.format(createSql, user.getUsername(), user.getEmail(), user.getPassword());
+        JdbcUtil.execute(connection, createSql);
     }
 }

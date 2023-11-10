@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Pin {
+public class Project {
    private Long id;
    private Long authorId;
    private String title;

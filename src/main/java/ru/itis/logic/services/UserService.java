@@ -1,2 +1,17 @@
-package ru.itis.logic.services;public interface UserService {
+package ru.itis.logic.services;
+
+import ru.itis.dao.entities.Tag;
+import ru.itis.dao.entities.User;
+
+import java.util.List;
+
+public interface UserService {
+    User get(Long id);
+    User get(String username, String password);
+
+    void create(String username, String email, String hash);
+
+    void update(User user);
+
+    void update(User profile, List<Tag> tags);
 }

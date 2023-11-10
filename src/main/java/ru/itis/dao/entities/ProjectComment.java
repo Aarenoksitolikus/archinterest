@@ -1,6 +1,7 @@
-package ru.itis.dao.entities.abs;
+package ru.itis.dao.entities;
 
 import lombok.*;
+import ru.itis.dao.entities.abs.Comment;
 
 @Getter
 @Setter

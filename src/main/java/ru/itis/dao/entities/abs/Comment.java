@@ -1,15 +1,8 @@
-package ru.itis.dao.entities;
-
-import lombok.*;
+package ru.itis.dao.entities.abs;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class Comment {
+public abstract class Comment {
     private Long id;
     private Long authorId;
     private String authorUsername;

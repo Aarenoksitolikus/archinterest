@@ -1,7 +1,8 @@
-package ru.itis.dao.repositories;
+package ru.itis.dao.repositories.impl;
 
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
+import ru.itis.dao.repositories.TagRepository;
 
 import java.util.List;
 
