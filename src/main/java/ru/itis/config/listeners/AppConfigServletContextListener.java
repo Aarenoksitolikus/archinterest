@@ -21,17 +21,17 @@ public class AppConfigServletContextListener implements ServletContextListener {
 
         Connection connection = JdbcUtil.getConnection();
 
-//        CommentRepository commentRepository = new CommentRepositoryImpl(connection);
+        CommentRepository commentRepository = new CommentRepositoryImpl(connection);
         ImageRepository imageRepository = new ImageRepositoryImpl(connection);
         NewsRepository newsRepository = new NewsRepositoryImpl(connection);
-//        ProjectsRepository projectsRepository = new ProjectsRepositoryImpl(connection);
+        ProjectsRepository projectsRepository = new ProjectsRepositoryImpl(connection);
         TagRepository tagRepository = new TagRepositoryImpl(connection);
         UserRepository userRepository = new UserRepositoryImpl(connection);
 
-        CommentService commentService = new CommentServiceImpl(null);
+        CommentService commentService = new CommentServiceImpl(commentRepository);
         ImageService imageService = new ImageServiceImpl(imageRepository);
         NewsService newsService = new NewsServiceImpl(newsRepository);
-        ProjectService projectService = new ProjectServiceImpl(null);
+        ProjectService projectService = new ProjectServiceImpl(projectsRepository);
         TagService tagService = new TagServiceImpl(tagRepository);
         UserService userService = new UserServiceImpl(userRepository);
 

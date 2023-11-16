@@ -3,6 +3,7 @@ package ru.itis.logic.services.impl;
 import ru.itis.dao.entities.News;
 import ru.itis.dao.entities.NewsComment;
 import ru.itis.dao.entities.Project;
+import ru.itis.dao.entities.ProjectComment;
 import ru.itis.dao.repositories.CommentRepository;
 import ru.itis.logic.services.CommentService;
 
@@ -17,11 +18,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<NewsComment> getList(News news) {
-        return commentRepository.getList(news);
+        return commentRepository.findAll(news);
     }
 
     @Override
-    public List<NewsComment> getList(Project project) {
-        return commentRepository.getList(project);
+    public List<ProjectComment> getList(Project project) {
+        return commentRepository.findAll(project);
+    }
+
+    @Override
+    public void like(Long commentId) {
+        commentRepository.like(commentId);
+    }
+
+    @Override
+    public void dislike(Long commentId) {
+        commentRepository.dislike(commentId);
     }
 }

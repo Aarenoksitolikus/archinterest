@@ -28,7 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
             .email(row.getString("email"))
             .password(row.getString("password"))
             .about(row.getString("about"))
-            .registeredAt(row.getTimestamp("registered_at").toLocalDateTime())
+            .registeredAt(row.getTimestamp("registered_at"))
             .build();
 
     @Override

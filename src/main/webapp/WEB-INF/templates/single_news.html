@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>News</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/blog/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../images/logo.png">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../styles/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../styles/blog.css" rel="stylesheet">
+    <link href="../styles/comments.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="#">Archinterest</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/archinterest/arch">Main</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/archinterest/gallery">Gallery</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/archinterest/news">News <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/archinterest/projects" tabindex="-1">Projects</a>
+                </li>
+            </ul>
+            <a class="btn btn-outline-warning my-2 my-sm-0" href="/archinterest/profile">Profile</a>
+
+        </div>
+    </nav>
+</header>
+
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-8 blog-main">
+            <div class="blog-post">
+                <h2 class="blog-post-title">${post.getTitle()}</h2>
+                <p class="blog-post-meta">${post.createdAt?date} by <strong>${post.getAuthorUsername()}</strong></p>
+
+                <p class="blog-post-cover">
+                    <img src="../${post.getCoverPath()}" alt="img" width="100%" height="300">
+                </p>
+                <hr>
+                <p>${post.getAnnotation()}</p>
+                <hr>
+                <p>${post.getContent()}</p>
+                <hr>
+            </div><!-- /.blog-post -->
+            <div class="comment-wrapper">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        Comment panel
+                    </div>
+                    <div class="panel-body">
+                        <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                        <br>
+                        <button type="button" class="btn btn-info pull-right">Post</button>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <ul class="media-list">
+                            <#list comments as comment>
+                            <li class="media">
+                                <a href="#" class="pull-left">
+                                    <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                                </a>
+                                <div class="media-body">
+                                <span class="text-muted pull-right">
+                                    <small class="text-muted">${comment.createdAt}</small>
+                                </span>
+                                    <strong class="text-success">${comment.authorUsername}</strong>
+                                    <p>${comment.content}</p>
+                                    <div class="list-group list-group-horizontal" >
+                                        <form class="list-group-item" method="post" action="/archinterest/news/like/${comment.id}">
+                                            <p><span class="badge badge-primary badge-pill">${comment.likes}</span> <input class="btn btn-success" type="submit" value="Like"></p>
+                                        </form>
+                                        <form class="list-group-item" method="post" action="/archinterest/news/dislike/${comment.id}">
+                                            <p><span class="badge badge-primary badge-pill">${comment.dislikes}</span> <input class="btn btn-danger" type="submit" value="Dislike"></p>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </#list>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.blog-main -->
+
+        <aside class="col-md-4 blog-sidebar">
+            <div class="p-4 mb-3 bg-light rounded">
+                <h4 class="font-italic">About</h4>
+                <p class="mb-0">Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus
+                    sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+            </div>
+
+            <div class="p-4">
+                <h4 class="font-italic">Archives</h4>
+                <ol class="list-unstyled mb-0">
+                    <li><a href="#">March 2014</a></li>
+                    <li><a href="#">February 2014</a></li>
+                    <li><a href="#">January 2014</a></li>
+                    <li><a href="#">December 2013</a></li>
+                    <li><a href="#">November 2013</a></li>
+                    <li><a href="#">October 2013</a></li>
+                    <li><a href="#">September 2013</a></li>
+                    <li><a href="#">August 2013</a></li>
+                    <li><a href="#">July 2013</a></li>
+                    <li><a href="#">June 2013</a></li>
+                    <li><a href="#">May 2013</a></li>
+                    <li><a href="#">April 2013</a></li>
+                </ol>
+            </div>
+
+            <div class="p-4">
+                <h4 class="font-italic">Elsewhere</h4>
+                <ol class="list-unstyled">
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ol>
+            </div>
+        </aside><!-- /.blog-sidebar -->
+
+    </div><!-- /.row -->
+
+</main><!-- /.container -->
+
+<footer class="blog-footer">
+    <p>
+        <a href="#">Back to top</a>
+    </p>
+</footer>
+</body>
+</html>

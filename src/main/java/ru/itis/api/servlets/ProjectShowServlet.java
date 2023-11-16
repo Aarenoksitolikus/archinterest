@@ -2,6 +2,7 @@ package ru.itis.api.servlets;
 
 import ru.itis.dao.entities.NewsComment;
 import ru.itis.dao.entities.Project;
+import ru.itis.dao.entities.ProjectComment;
 import ru.itis.logic.services.CommentService;
 import ru.itis.logic.services.ProjectService;
 
@@ -32,7 +33,7 @@ public class ProjectShowServlet extends HttpServlet {
         resp.setContentType("text/html");
         Long projectId = (Long) req.getAttribute("project");
         Project project = projectService.get(projectId);
-        List<NewsComment> comments = commentService.getList(project);
+        List<ProjectComment> comments = commentService.getList(project);
         req.setAttribute("project", project);
         req.setAttribute("comments", comments);
         req.getServletContext().getRequestDispatcher("/WEB-INF/templates/single_project.html").forward(req, resp);

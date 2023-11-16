@@ -8,15 +8,15 @@ import java.util.List;
 
 public class JdbcUtil<T> {
     private static Connection conn = null;
-    private static final String url = "jdbc:postgresql://localhost:5432/archinterest_db";
-    private static final String username = "postgres";
-    private static final String password = "qwerty007";
+    private static final String URL = "jdbc:postgresql://localhost:5432/archinterest_db";
+    private static final String USERNAME = "postgres";
+    private static final String PASSWORD = "Fadc766e!";
 
     public static Connection getConnection() {
         if (conn == null) {
             try {
                 DriverManager.registerDriver(new Driver());
-                conn = DriverManager.getConnection(url, username, password);
+                conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
             } catch (SQLException e) {
                 throw new IllegalStateException(e);
             }

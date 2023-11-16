@@ -2,7 +2,7 @@ package ru.itis.dao.entities;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -17,5 +17,5 @@ public class Project {
    private String address;
    private Double area;
    private Integer year;
-   private LocalDateTime postedAt;
+   private Timestamp postedAt;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
-    private static final String DIRECTORY_PATH = "C:\\Users\\super\\IdeaProjects\\itis\\archinterest\\src\\main\\webapp\\images\\";
+    private static final String DIRECTORY_PATH = "C:\\Users\\mivanov\\IdeaProjects\\personal\\archinterest\\src\\main\\webapp\\images\\";
 
 
     public ImageServiceImpl(ImageRepository imageRepository) {

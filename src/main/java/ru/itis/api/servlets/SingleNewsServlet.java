@@ -15,12 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@WebServlet(name = "NewsServlet", value = "/news")
-public class NewsServlet extends HttpServlet {
+@WebServlet(name = "SingleNewsServlet", value = "/news/*")
+public class SingleNewsServlet extends HttpServlet {
 
     private NewsService newsService;
     private CommentService commentService;
@@ -35,29 +33,13 @@ public class NewsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        HttpSession session = req.getSession();
-        User current = (User) session.getAttribute("current");
-        Boolean today = (Boolean) req.getAttribute("today");
-        List<News> news;
+        Long newsId = Long.parseLong(req.getPathInfo().replace("/", ""));
+        News news = newsService.get(newsId);
+        List<NewsComment> comments = commentService.getList(news);
 
-        if (current != null) {
-            req.setAttribute("author", current.getId());
-
-            if (today != null && today.equals(true)) {
-                news = newsService.getAllToday(current);
-            } else {
-                news = newsService.getAll(current);
-            }
-        } else {
-            if (today != null && today.equals(true)) {
-                news = newsService.getAllToday();
-            } else {
-                news = newsService.getAll();
-            }
-        }
-
-        req.setAttribute("news", news);
-        req.getServletContext().getRequestDispatcher("/WEB-INF/templates/news.html").forward(req, resp);
+        req.setAttribute("post", news);
+        req.setAttribute("comments", comments);
+        req.getServletContext().getRequestDispatcher("/WEB-INF/templates/single_news.html").forward(req, resp);
     }
 
     @Override

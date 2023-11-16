@@ -7,7 +7,7 @@ import ru.itis.dao.utils.JdbcUtil;
 import ru.itis.dao.utils.RowMapper;
 
 import java.sql.Connection;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class NewsRepositoryImpl implements NewsRepository {
@@ -30,10 +30,14 @@ public class NewsRepositoryImpl implements NewsRepository {
     private final RowMapper<News> newsRowMapper = (row, number) -> News.builder()
             .id(row.getLong("id"))
             .authorId(row.getLong("author_id"))
+            .authorUsername(row.getString("author_username"))
+            .authorName(row.getString("author_name"))
+            .authorLastname(row.getString("author_lastname"))
             .title(row.getString("title"))
+            .annotation(row.getString("annotation"))
             .content(row.getString("content"))
-            .createdAt(row.getTimestamp("created_at").toLocalDateTime())
-            .coverPath(row.getString(row.getString("cover_path")))
+            .createdAt(row.getTimestamp("created_at"))
+            .coverPath(row.getString("cover_path"))
             .build();
 
     @Override
@@ -54,14 +58,14 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public List<News> getAllBetween(LocalDateTime from, LocalDateTime to) {
+    public List<News> getAllBetween(Timestamp from, Timestamp to) {
         String selectSql = SELECT_ALL + WHERE_BETWEEN + ORDER_BY;
         selectSql = String.format(selectSql, from, to);
         return jdbcUtil.selectList(connection, selectSql, newsRowMapper);
     }
 
     @Override
-    public List<News> getAllBetweenByTags(LocalDateTime startOfDay, LocalDateTime endOfDay, User currentUser) {
+    public List<News> getAllBetweenByTags(Timestamp startOfDay, Timestamp endOfDay, User currentUser) {
         List<Long> userTags = getUserTags(currentUser);
         String selectSql = SELECT_ALL;
         if (!userTags.isEmpty()) {
@@ -82,7 +86,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void save(News news) {
-        String createSql = "insert into news (author_id, title, content, created_at, updated_at, cover_path) values (%s, %s, %s, now(), now(), ?))";
+        String createSql = "insert into news (author_id, title, annotation, content, created_at, updated_at, cover_path) values (%s, '%s' '%s', '%s', now(), now(), '%s'))";
         createSql = String.format(createSql, news.getAuthorId(), news.getTitle(), news.getContent(), news.getCoverPath());
         JdbcUtil.execute(connection, createSql);
     }

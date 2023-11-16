@@ -5,6 +5,7 @@ import ru.itis.dao.entities.User;
 import ru.itis.dao.repositories.NewsRepository;
 import ru.itis.logic.services.NewsService;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,18 +48,18 @@ public class NewsServiceImpl implements NewsService {
         return newsRepository.findAll(current);
     }
 
-    private LocalDateTime getStartOfDay() {
+    private Timestamp getStartOfDay() {
         LocalDate now = LocalDate.now();
-        return LocalDateTime.of(now.getYear(),
+        return Timestamp.valueOf(LocalDateTime.of(now.getYear(),
                 now.getMonth(),
                 now.getDayOfMonth(),
-                0, 0, 0);
+                0, 0, 0));
     }
-    private LocalDateTime getEndOfDay() {
+    private Timestamp getEndOfDay() {
         LocalDate now = LocalDate.now();
-        return LocalDateTime.of(now.getYear(),
+        return Timestamp.valueOf(LocalDateTime.of(now.getYear(),
                 now.getMonth(),
                 now.getDayOfMonth(),
-                23, 59, 59);
+                23, 59, 59));
     }
 }

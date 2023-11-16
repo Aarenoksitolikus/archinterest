@@ -2,7 +2,7 @@ package ru.itis.dao.entities;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private LocalDateTime registeredAt;
+    private Timestamp registeredAt;
     private String name;
     private String patronymic;
     private String lastname;

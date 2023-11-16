@@ -1,7 +1,15 @@
 package ru.itis.dao.entities.abs;
 
-import java.time.LocalDateTime;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.sql.Timestamp;
+
+@Getter
+@Setter
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class Comment {
     private Long id;
     private Long authorId;
@@ -9,5 +17,5 @@ public abstract class Comment {
     private String content;
     private Integer likes;
     private Integer dislikes;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 }

@@ -2,7 +2,7 @@ package ru.itis.dao.entities;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -12,8 +12,12 @@ import java.time.LocalDateTime;
 public class News {
     private Long id;
     private Long authorId;
+    private String authorUsername;
+    private String authorName;
+    private String authorLastname;
     private String title;
+    private String annotation;
     private String content;
     private String coverPath;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 }
