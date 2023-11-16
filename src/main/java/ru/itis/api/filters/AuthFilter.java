@@ -37,36 +37,43 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         Cookie[] cookies = req.getCookies();
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("current");
 
         String[] strings = req.getServletPath().split("/");
 
+        User userByToken = userByToken(cookies);
         if (strings.length == 1 || allowedPaths.contains(strings[1])) {
+            if (userByToken != null || user != null) {
+                session.setAttribute("current", user == null ? userByToken : user);
+            }
             chain.doFilter(req, resp);
         } else {
-            HttpSession session = req.getSession();
-            User user = (User) session.getAttribute("current");
 
             if (user != null) {
                 chain.doFilter(req, resp);
                 return;
             }
 
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String[] split = cookie.getValue().split("_");
-                    String username = split[0];
-                    String hash = split[1];
-                    user = userService.get(username, hash);
-
-                    if (user != null) {
-                        session.setAttribute("current", user);
-                        chain.doFilter(req, resp);
-                        return;
-                    }
-                }
+            if (userByToken != null) {
+                session.setAttribute("current", userByToken);
+                chain.doFilter(req, resp);
+                return;
             }
 
             req.getRequestDispatcher("/archinterest/auth");
         }
+    }
+
+    private User userByToken(Cookie[] cookies) {
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String[] split = cookie.getValue().split("_");
+                String username = split[0];
+                String hash = split[1];
+                return userService.get(username, hash);
+            }
+        }
+        return null;
     }
 }

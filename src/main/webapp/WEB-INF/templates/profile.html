@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles/profile.css">
     <link rel="icon" href="images/logo.png">
+
+    <#assign name = (profile.name??)?then(profile.name, "")>
+    <#assign lastName = (profile.lastname??)?then(profile.lastname, "")>
+    <#assign patronymic = (profile.patronymic??)?then(profile.patronymic, "")>
 </head>
 <body>
 <header>
@@ -136,9 +140,7 @@
                                     <h6 class="mb-0">Full Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <#if (profile.lastname)?? && (profile.name)??>${profile.lastname}
-                                    ${profile.name}<#else>Undefined
-                                </#if>
+                                    ${lastName} ${name} ${patronymic}
                             </div>
                         </div>
                         <hr>
@@ -156,15 +158,14 @@
                                 <h6 class="mb-0">Registered at</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                fuck
+                                ${profile.registeredAt}
                             </div>
                         </div>
                         <hr>
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <a class="btn btn-info "
-                                   href="/archinterest/preferences">Edit</a>
+                                <a class="btn btn-info" href="/archinterest/preferences">Edit</a>
                             </div>
                         </div>
                     </div>
@@ -248,6 +249,4 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script src="scripts/auth.js"></script>
-</body>
 </html>

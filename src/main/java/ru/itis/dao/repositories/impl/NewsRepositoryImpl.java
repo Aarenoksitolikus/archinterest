@@ -56,6 +56,7 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public List<News> getAllBetween(LocalDateTime from, LocalDateTime to) {
         String selectSql = SELECT_ALL + WHERE_BETWEEN + ORDER_BY;
+        selectSql = String.format(selectSql, from, to);
         return jdbcUtil.selectList(connection, selectSql, newsRowMapper);
     }
 

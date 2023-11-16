@@ -7,12 +7,14 @@ import ru.itis.logic.services.ImageService;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
 @WebServlet(name = "GalleryServlet", value = "/gallery")
+@MultipartConfig
 public class GalleryServlet extends HttpServlet {
 
     private ImageService imageService;
@@ -43,6 +45,6 @@ public class GalleryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part file = req.getPart("image");
         imageService.create(file);
-        req.getServletContext().getRequestDispatcher("/gallery").forward(req, resp);
+        resp.sendRedirect("/archinterest/gallery");
     }
 }

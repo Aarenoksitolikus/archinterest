@@ -22,11 +22,12 @@ public class UserRepositoryImpl implements UserRepository {
     private final RowMapper<User> userRowMapper = (row, number) -> User.builder()
             .id(row.getLong("id"))
             .name(row.getString("name"))
-            .surname(row.getString("surname"))
+            .patronymic(row.getString("patronymic"))
             .lastname(row.getString("lastname"))
             .username(row.getString("username"))
             .email(row.getString("email"))
             .password(row.getString("password"))
+            .about(row.getString("about"))
             .registeredAt(row.getTimestamp("registered_at").toLocalDateTime())
             .build();
 
@@ -46,18 +47,28 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void update(User user) {
-        String updateSql = "update account set name = '%s', surname = '%s', last_name = '%s' where id = %s)";
-        updateSql = String.format(updateSql, user.getName(), user.getSurname(), user.getLastname(), user.getId());
+        String updateSql = "update account set name = '%s', patronymic = '%s', lastname = '%s', about = '%s', email = '%s' where id = %s";
+        updateSql = String.format(updateSql, user.getName(), user.getPatronymic(), user.getLastname(), user.getAbout(), user.getEmail(), user.getId());
         JdbcUtil.execute(connection, updateSql);
     }
 
     @Override
     public void update(User profile, List<Tag> tags) {
         update(profile);
-        for (Tag tag : tags) {
-            String createSql = "insert into account_tags (account_id, tag_id) values (%s, %s)";
-            createSql = String.format(createSql, profile.getId(), tag.getId());
-            JdbcUtil.execute(connection, createSql);
+
+        if (!tags.isEmpty()) {
+            String deleteSql = "delete from account_tag where account_id = %s;";
+            deleteSql = String.format(deleteSql, profile.getId());
+            JdbcUtil.execute(connection, deleteSql);
+
+            StringBuilder createSql = new StringBuilder(" insert into account_tag (account_id, tag_id) values ");
+
+            for (Tag tag : tags) {
+                createSql.append(String.format("(%s, %s), ", profile.getId(), tag.getId()));
+            }
+
+            createSql = new StringBuilder(createSql.substring(0, createSql.length() - 2)).append(";");
+            JdbcUtil.execute(connection, createSql.toString());
         }
     }
 

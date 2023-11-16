@@ -13,7 +13,7 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     private final Connection connection;
     private final JdbcUtil<Image> jdbcUtil;
-    private static final String DIRECTORY_PATH = "/webapp/images/";
+    private static final String DIRECTORY_PATH = "images/";
 
     public ImageRepositoryImpl(Connection connection) {
         this.connection = connection;
@@ -31,8 +31,8 @@ public class ImageRepositoryImpl implements ImageRepository {
 
     @Override
     public void create(Part file) {
-        String createSql = "insert into image (filename, original_filename, file_path, content_type, size) values (%s, %s, %s, '%s', %s)";
-        createSql = String.format(createSql, file.getName(), file.getSubmittedFileName(), DIRECTORY_PATH + file.getName(), file.getContentType(), file.getSize());
+        String createSql = "insert into image (filename, original_filename, file_path, content_type, size) values ('%s', '%s', '%s', '%s', %s)";
+        createSql = String.format(createSql, file.getName(), file.getSubmittedFileName(), DIRECTORY_PATH + file.getSubmittedFileName(), file.getContentType(), file.getSize());
         JdbcUtil.execute(connection, createSql);
     }
 
