@@ -9,15 +9,12 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/blog/">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="../images/logo.png">
+    <link rel="icon" href="../../images/logo.png">
 
-    <!-- Bootstrap core CSS -->
-    <link href="../styles/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
+    <link href="../../styles/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="../styles/blog.css" rel="stylesheet">
-    <link href="../styles/comments.css" rel="stylesheet">
+    <link href="../../styles/blog.css" rel="stylesheet">
+    <link href="../../styles/comments.css" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -35,10 +32,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/archinterest/gallery">Gallery</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/archinterest/news">News <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/archinterest/projects" tabindex="-1">Projects</a>
                 </li>
             </ul>
@@ -56,7 +53,7 @@
                 <p class="blog-post-meta">${project.postedAt?date}</p>
 
                 <p class="blog-post-cover">
-                    <img src="../${project.getCoverPath()}" alt="img" width="100%" height="300">
+                    <img src="../../${project.getCoverPath()}" alt="img" width="100%" height="300">
                 </p>
                 <hr>
                 <p><strong>Area:</strong> ${project.getArea()}</p>
@@ -74,16 +71,20 @@
                         Comment panel
                     </div>
                     <div class="panel-body">
-                        <textarea class="form-control" placeholder="Write a comment..." rows="3"></textarea>
-                        <br>
-                        <button type="button" class="btn btn-info pull-right">Post</button>
+                        <form method="post" action="/archinterest/project/comment/${project.id}">
+                            <textarea name="content" id="content" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                            <br>
+                            <input type="submit" class="btn btn-info pull-right" value="Post">
+                        </form>
                         <div class="clearfix"></div>
                         <hr>
                         <ul class="media-list">
                             <#list comments as comment>
                             <li class="media">
                                 <a href="#" class="pull-left">
-                                    <img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                                    <#assign avatar = (comment.avatarPath?? && comment.avatarPath != "" && comment.avatarPath != "https://bootdey.com/img/Content/avatar/avatar7.png")?then('../../' + comment.avatarPath,
+                                    "https://bootdey.com/img/Content/avatar/avatar7.png")>
+                                    <img src="${avatar}" alt="" class="img-circle">
                                 </a>
                                 <div class="media-body">
                                 <span class="text-muted pull-right">
@@ -92,11 +93,15 @@
                                     <strong class="text-success">${comment.authorUsername}</strong>
                                     <p>${comment.content}</p>
                                     <div class="list-group list-group-horizontal" >
-                                        <form class="list-group-item" method="post" action="/archinterest/news/like/${comment.id}">
-                                            <p><span class="badge badge-primary badge-pill">${comment.likes}</span> <input class="btn btn-success" type="submit" value="Like"></p>
+                                        <form class="list-group-item" method="post"
+                                              action="/archinterest/comment/like/${comment.id}">
+                                            <p><span class="badge badge-primary badge-pill">${comment.likes}</span>
+                                                <input class="btn btn-sm btn-success" type="submit" value="Like"></p>
                                         </form>
-                                        <form class="list-group-item" method="post" action="/archinterest/news/dislike/${comment.id}">
-                                            <p><span class="badge badge-primary badge-pill">${comment.dislikes}</span> <input class="btn btn-danger" type="submit" value="Dislike"></p>
+                                        <form class="list-group-item" method="post"
+                                              action="/archinterest/comment/dislike/${comment.id}">
+                                            <p><span class="badge badge-primary badge-pill">${comment.dislikes}</span>
+                                                <input class="btn btn-sm btn-danger" type="submit" value="Dislike"></p>
                                         </form>
                                     </div>
                                 </div>

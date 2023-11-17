@@ -12,13 +12,13 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
     private UserService userService;
     private final List<String> allowedPaths = new ArrayList<>();
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         ServletContext servletContext = filterConfig.getServletContext();
@@ -30,7 +30,7 @@ public class AuthFilter implements Filter {
         allowedPaths.add("gallery");
         allowedPaths.add("reg");
         allowedPaths.add("auth");
-        allowedPaths.add("test");
+        allowedPaths.add("logout");
     }
 
     @Override
@@ -44,8 +44,9 @@ public class AuthFilter implements Filter {
         String[] strings = req.getServletPath().split("/");
 
         User userByToken = userByToken(cookies);
+
         if (strings.length == 1 || allowedPaths.contains(strings[1])) {
-            if (userByToken != null || user != null) {
+            if (!strings[1].equals("logout") && (userByToken != null || user != null)) {
                 session.setAttribute("current", user == null ? userByToken : user);
             }
             chain.doFilter(req, resp);

@@ -38,6 +38,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public Image get(Part file) {
+        return imageRepository.find(file.getSubmittedFileName());
+    }
+
+    @Override
     public List<Image> findAll() {
         return imageRepository.findAll();
     }

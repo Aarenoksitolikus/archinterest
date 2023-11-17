@@ -1,5 +1,6 @@
 package ru.itis.dao.repositories.impl;
 
+import ru.itis.dao.entities.News;
 import ru.itis.dao.entities.Project;
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
@@ -36,6 +37,13 @@ public class TagRepositoryImpl implements TagRepository {
     public List<Tag> findAll(Project project) {
         String selectSql = "select * from tag t left join project_tag at on at.tag_id = t.id where at.project_id = %s order by title";
         selectSql = String.format(selectSql, project.getId());
+        return jdbcUtil.selectList(connection, selectSql, tagRowMapper);
+    }
+
+    @Override
+    public List<Tag> findAll(News news) {
+        String selectSql = "select * from tag t left join news_tag at on at.tag_id = t.id where at.news_id = %s order by title";
+        selectSql = String.format(selectSql, news.getId());
         return jdbcUtil.selectList(connection, selectSql, tagRowMapper);
     }
 

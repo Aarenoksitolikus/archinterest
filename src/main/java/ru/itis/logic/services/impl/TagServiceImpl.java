@@ -1,5 +1,6 @@
 package ru.itis.logic.services.impl;
 
+import ru.itis.dao.entities.News;
 import ru.itis.dao.entities.Project;
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
@@ -24,6 +25,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getList(Project project) {
         return tagRepository.findAll(project);
+    }
+
+    @Override
+    public List<Tag> getList(News news) {
+        return tagRepository.findAll(news);
     }
 
     @Override

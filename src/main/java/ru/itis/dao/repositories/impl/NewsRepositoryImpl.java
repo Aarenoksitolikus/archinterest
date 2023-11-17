@@ -1,13 +1,17 @@
 package ru.itis.dao.repositories.impl;
 
 import ru.itis.dao.entities.News;
+import ru.itis.dao.entities.NewsComment;
+import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
+import ru.itis.dao.entities.abs.Comment;
 import ru.itis.dao.repositories.NewsRepository;
 import ru.itis.dao.utils.JdbcUtil;
 import ru.itis.dao.utils.RowMapper;
 
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class NewsRepositoryImpl implements NewsRepository {
@@ -15,8 +19,8 @@ public class NewsRepositoryImpl implements NewsRepository {
     private final Connection connection;
     private final JdbcUtil<News> jdbcUtil;
 
-    private static final String SELECT_ALL = "select n.*, i.file_path from news n left join image i on n.cover_path = i.file_path";
-    private static final String LEFT_JOIN = " left join news_tag nt on nt.news_id = n.id";
+    private static final String SELECT_ALL = "select n.* from news n";
+    private static final String LEFT_JOIN = "  join news_tag nt on nt.news_id = n.id";
     private static final String WHERE_BETWEEN = " where n.created_at between '%s' and '%s'";
     private static final String WHERE_ID = " where n.id = %s";
     private static final String WHERE_TAG_IN = " and nt.tag_id in (%s)";
@@ -86,9 +90,48 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void save(News news) {
-        String createSql = "insert into news (author_id, title, annotation, content, created_at, updated_at, cover_path) values (%s, '%s' '%s', '%s', now(), now(), '%s'))";
-        createSql = String.format(createSql, news.getAuthorId(), news.getTitle(), news.getContent(), news.getCoverPath());
+        String createSql = "insert into news (author_id, author_username, author_name, author_lastname, title, annotation, content, created_at, cover_path) values (%s, '%s', '%s', '%s', '%s', '%s', '%s', now(), '%s')";
+        createSql = String.format(createSql, news.getAuthorId(), news.getAuthorUsername(), news.getAuthorName(), news.getAuthorLastname(), news.getTitle(), news.getAnnotation(), news.getContent(), news.getCoverPath());
         JdbcUtil.execute(connection, createSql);
+    }
+
+    @Override
+    public void update(News news, NewsComment comment) {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        String createSql = "insert into comment (author_id, author_username, content, created_at, likes, dislikes,avatar_path) values (%s, '%s', '%s', '%s', 0, 0, '%s')";
+        createSql = String.format(createSql, comment.getAuthorId(), comment.getAuthorUsername(), comment.getContent(), now, comment.getAvatarPath());
+        JdbcUtil.execute(connection, createSql);
+
+        String selectSql = "select * from comment where author_id = %s and content = '%s' and created_at = '%s'";
+        selectSql = String.format(selectSql, comment.getAuthorId(), comment.getContent(), now);
+        JdbcUtil<Comment> commentJdbcUtil = new JdbcUtil<>();
+        Comment savedComment = commentJdbcUtil.selectOne(connection, selectSql, (row, number) -> NewsComment.builder()
+                .id(row.getLong("id"))
+                .build());
+
+        String updateSql = String.format("insert into news_comment values (%s, %s)", news.getId(), savedComment.getId());
+        JdbcUtil.execute(connection, updateSql);
+    }
+
+    @Override
+    public void update(News news, List<Tag> tagsToUpdate) {
+        if (!tagsToUpdate.isEmpty()) {
+            StringBuilder createSql = new StringBuilder(" insert into news_tag (news_id, tag_id) values ");
+
+            for (Tag tag : tagsToUpdate) {
+                createSql.append(String.format("(%s, %s), ", news.getId(), tag.getId()));
+            }
+
+            createSql = new StringBuilder(createSql.substring(0, createSql.length() - 2)).append(";");
+            JdbcUtil.execute(connection, createSql.toString());
+        }
+    }
+
+    @Override
+    public News get(News news) {
+        String selectSql = "select * from news where title = '%s' and annotation = '%s' and content = '%s' and author_id = %s";
+        selectSql = String.format(selectSql, news.getTitle(), news.getAnnotation(), news.getContent(), news.getAuthorId());
+        return jdbcUtil.selectOne(connection, selectSql, newsRowMapper);
     }
 
     private String processUserTags(List<Long> tagIds) {

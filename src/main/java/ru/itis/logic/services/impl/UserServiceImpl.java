@@ -1,9 +1,7 @@
 package ru.itis.logic.services.impl;
 
-import ru.itis.dao.entities.Image;
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
-import ru.itis.dao.repositories.ImageRepository;
 import ru.itis.dao.repositories.UserRepository;
 import ru.itis.logic.services.UserService;
 import ru.itis.utils.FileUploader;
@@ -15,12 +13,10 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
-    private static final String DIRECTORY_PATH = "C:\\Users\\super\\IdeaProjects\\itis\\archinterest\\src\\main\\webapp\\images\\";
+    private static final String DIRECTORY_PATH = "C:\\Users\\mivanov\\IdeaProjects\\personal\\archinterest\\src\\main\\webapp\\images\\";
 
-    public UserServiceImpl(UserRepository userRepository, ImageRepository imageRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.imageRepository = imageRepository;
     }
 
     @Override

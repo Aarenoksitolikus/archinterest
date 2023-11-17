@@ -4,7 +4,6 @@ import ru.itis.dao.entities.News;
 import ru.itis.dao.entities.NewsComment;
 import ru.itis.dao.entities.Project;
 import ru.itis.dao.entities.ProjectComment;
-import ru.itis.dao.entities.abs.Comment;
 import ru.itis.dao.repositories.CommentRepository;
 import ru.itis.dao.utils.JdbcUtil;
 import ru.itis.dao.utils.RowMapper;
@@ -20,11 +19,12 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     private static final String SQL_GET = "select c.*, a.username";
     private static final String FROM =" from comment c";
-    private static final String SQL_JOIN_PIN = " left join project_comment pc on pc.project_id = c.id";
-    private static final String SQL_JOIN_NEWS = " left join news_comment nc on nc.news_id = c.id";
+    private static final String SQL_JOIN_PIN = " left join project_comment pc on pc.comment_id = c.id";
+    private static final String SQL_JOIN_NEWS = " left join news_comment nc on nc.comment_id = c.id";
     private static final String SQL_JOIN_USER = " left join account a on a.id = c.author_id";
-    private static final String SQL_GET_BY_PROJECT_ID = SQL_GET + ", pc.project_id" + FROM + SQL_JOIN_USER + SQL_JOIN_PIN + " where pc.project_id = %s";
-    private static final String SQL_GET_BY_NEWS_ID = SQL_GET + ", nc.news_id" + FROM + SQL_JOIN_USER + SQL_JOIN_NEWS + " where nc.news_id = %s";
+    private static final String SQL_ORDER_BY = " order by created_at";
+    private static final String SQL_GET_BY_PROJECT_ID = SQL_GET + ", pc.project_id" + FROM + SQL_JOIN_USER + SQL_JOIN_PIN + " where pc.project_id = %s" + SQL_ORDER_BY;
+    private static final String SQL_GET_BY_NEWS_ID = SQL_GET + ", nc.news_id" + FROM + SQL_JOIN_USER + SQL_JOIN_NEWS + " where nc.news_id = %s" + SQL_ORDER_BY;
     private static final String LIKE = "update comment set likes = likes + 1 where id = %s";
     private static final String DISLIKE = "update comment set dislikes = dislikes + 1 where id = %s";
 
@@ -39,6 +39,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             .newsId(row.getLong("news_id"))
             .authorId(row.getLong("author_id"))
             .authorUsername(row.getString("username"))
+            .avatarPath(row.getString("avatar_path"))
             .content(row.getString("content"))
             .createdAt(row.getTimestamp("created_at"))
             .likes(row.getInt("likes"))
@@ -50,6 +51,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             .projectId(row.getLong("project_id"))
             .authorId(row.getLong("author_id"))
             .authorUsername(row.getString("username"))
+            .avatarPath(row.getString("avatar_path"))
             .content(row.getString("content"))
             .createdAt(row.getTimestamp("created_at"))
             .likes(row.getInt("likes"))

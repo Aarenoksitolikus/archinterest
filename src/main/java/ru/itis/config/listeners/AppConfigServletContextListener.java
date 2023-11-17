@@ -5,7 +5,6 @@ import ru.itis.dao.repositories.impl.*;
 import ru.itis.dao.utils.JdbcUtil;
 import ru.itis.logic.services.*;
 import ru.itis.logic.services.impl.*;
-import ru.itis.utils.FileUploader;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -24,16 +23,16 @@ public class AppConfigServletContextListener implements ServletContextListener {
         CommentRepository commentRepository = new CommentRepositoryImpl(connection);
         ImageRepository imageRepository = new ImageRepositoryImpl(connection);
         NewsRepository newsRepository = new NewsRepositoryImpl(connection);
-        ProjectsRepository projectsRepository = new ProjectsRepositoryImpl(connection);
+        ProjectRepository projectRepository = new ProjectRepositoryImpl(connection);
         TagRepository tagRepository = new TagRepositoryImpl(connection);
         UserRepository userRepository = new UserRepositoryImpl(connection);
 
         CommentService commentService = new CommentServiceImpl(commentRepository);
         ImageService imageService = new ImageServiceImpl(imageRepository);
-        NewsService newsService = new NewsServiceImpl(newsRepository);
-        ProjectService projectService = new ProjectServiceImpl(projectsRepository);
+        NewsService newsService = new NewsServiceImpl(newsRepository, tagRepository);
+        ProjectService projectService = new ProjectServiceImpl(projectRepository);
         TagService tagService = new TagServiceImpl(tagRepository);
-        UserService userService = new UserServiceImpl(userRepository, imageRepository);
+        UserService userService = new UserServiceImpl(userRepository);
 
         servletContext.setAttribute("commentService", commentService);
         servletContext.setAttribute("imageService", imageService);

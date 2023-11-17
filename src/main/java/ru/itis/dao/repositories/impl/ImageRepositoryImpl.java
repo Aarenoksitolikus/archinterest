@@ -30,8 +30,8 @@ public class ImageRepositoryImpl implements ImageRepository {
             .build();
 
     @Override
-    public Image find(String path) {
-        String selectSql = String.format("select * from image where file_path = '%s", path);
+    public Image find(String fileName) {
+        String selectSql = String.format("select * from image where file_path = '%s'", DIRECTORY_PATH + fileName);
         return jdbcUtil.selectOne(connection, selectSql, imageRowMapper);
     }
 

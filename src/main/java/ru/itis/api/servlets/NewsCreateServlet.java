@@ -1,12 +1,13 @@
 package ru.itis.api.servlets;
 
 import ru.itis.dao.entities.Image;
-import ru.itis.dao.entities.Project;
+import ru.itis.dao.entities.News;
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
 import ru.itis.logic.services.ImageService;
-import ru.itis.logic.services.ProjectService;
+import ru.itis.logic.services.NewsService;
 import ru.itis.logic.services.TagService;
+import ru.itis.logic.services.UserService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -19,17 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet(name = "ProjectCreateServlet", value = "/projects/create")
+@WebServlet(name = "NewsCreateServlet", value = "/news/create")
 @MultipartConfig
-public class ProjectCreateServlet extends HttpServlet {
-    private ProjectService projectService;
+public class NewsCreateServlet extends HttpServlet {
+    private NewsService newsService;
     private ImageService imageService;
     private TagService tagService;
+    private UserService userService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         ServletContext servletContext = config.getServletContext();
-        this.projectService = (ProjectService) servletContext.getAttribute("projectService");
+        this.newsService = (NewsService) servletContext.getAttribute("newsService");
+        this.userService = (UserService) servletContext.getAttribute("userService");
         this.tagService = (TagService) servletContext.getAttribute("tagService");
         this.imageService = (ImageService) servletContext.getAttribute("imageService");
     }
@@ -42,7 +45,7 @@ public class ProjectCreateServlet extends HttpServlet {
         List<Tag> tags = tagService.getAll();
         req.setAttribute("tags", tags);
         req.setAttribute("author", current.getId());
-        req.getServletContext().getRequestDispatcher("/WEB-INF/templates/project_create.html").forward(req, resp);
+        req.getServletContext().getRequestDispatcher("/WEB-INF/templates/news_create.html").forward(req, resp);
     }
 
     @Override
@@ -54,25 +57,25 @@ public class ProjectCreateServlet extends HttpServlet {
         imageService.create(file);
         Image image = imageService.get(file);
 
-        Project project = Project.builder()
+        News news = News.builder()
                 .title(req.getParameter("title"))
+                .annotation(req.getParameter("annotation"))
                 .content(req.getParameter("content"))
-                .year(Integer.parseInt(req.getParameter("year")))
-                .area(Double.parseDouble(req.getParameter("area")))
-                .address(req.getParameter("address"))
                 .coverPath(image.getFilePath())
                 .authorId(current.getId())
                 .authorUsername(current.getUsername())
+                .authorLastname(current.getLastname())
+                .authorName(current.getName())
                 .build();
 
-        projectService.create(project);
-        Project savedProject = projectService.get(project);
-        update(req, savedProject);
+        newsService.create(news);
+        News savedNews = newsService.get(news);
+        update(req, savedNews);
 
-        resp.sendRedirect("/archinterest/projects");
+        resp.sendRedirect("/archinterest/news");
     }
 
-    private void update(HttpServletRequest req, Project project) {
+    private void update(HttpServletRequest req, News news) {
         List<Tag> tags = tagService.getAll();
         List<Tag> tagsToUpdate = new ArrayList<>();
 
@@ -84,6 +87,6 @@ public class ProjectCreateServlet extends HttpServlet {
             }
         }
 
-        projectService.update(project, tagsToUpdate);
+        newsService.update(news, tagsToUpdate);
     }
 }

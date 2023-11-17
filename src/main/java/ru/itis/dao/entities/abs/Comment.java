@@ -14,6 +14,7 @@ public abstract class Comment {
     private Long id;
     private Long authorId;
     private String authorUsername;
+    private String avatarPath;
     private String content;
     private Integer likes;
     private Integer dislikes;
