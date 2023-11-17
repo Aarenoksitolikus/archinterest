@@ -12,7 +12,9 @@ import java.sql.Timestamp;
 public class Project {
    private Long id;
    private Long authorId;
+   private String authorUsername;
    private String title;
+   private String coverPath;
    private String content;
    private String address;
    private Double area;

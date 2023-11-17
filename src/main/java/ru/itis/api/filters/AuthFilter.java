@@ -30,6 +30,7 @@ public class AuthFilter implements Filter {
         allowedPaths.add("gallery");
         allowedPaths.add("reg");
         allowedPaths.add("auth");
+        allowedPaths.add("test");
     }
 
     @Override
@@ -66,12 +67,14 @@ public class AuthFilter implements Filter {
     }
 
     private User userByToken(Cookie[] cookies) {
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                String[] split = cookie.getValue().split("_");
-                String username = split[0];
-                String hash = split[1];
-                return userService.get(username, hash);
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String[] split = cookie.getValue().split("_");
+                    String username = split[0];
+                    String hash = split[1];
+                    return userService.get(username, hash);
+                }
             }
         }
         return null;

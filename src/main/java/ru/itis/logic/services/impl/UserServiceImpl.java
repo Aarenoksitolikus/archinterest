@@ -1,18 +1,26 @@
 package ru.itis.logic.services.impl;
 
+import ru.itis.dao.entities.Image;
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
+import ru.itis.dao.repositories.ImageRepository;
 import ru.itis.dao.repositories.UserRepository;
 import ru.itis.logic.services.UserService;
+import ru.itis.utils.FileUploader;
 
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
+    private final ImageRepository imageRepository;
+    private static final String DIRECTORY_PATH = "C:\\Users\\super\\IdeaProjects\\itis\\archinterest\\src\\main\\webapp\\images\\";
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, ImageRepository imageRepository) {
         this.userRepository = userRepository;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -44,5 +52,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User profile, List<Tag> tags) {
         userRepository.update(profile, tags);
+    }
+
+    @Override
+    public void update(User user, Part avatar) {
+        try (InputStream inputStream = avatar.getInputStream()) {
+            String submittedFileName = avatar.getSubmittedFileName();
+            FileUploader.upload(inputStream, DIRECTORY_PATH, submittedFileName);
+            userRepository.update(user, "images/" + submittedFileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

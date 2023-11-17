@@ -1,5 +1,6 @@
 package ru.itis.logic.services.impl;
 
+import ru.itis.dao.entities.Project;
 import ru.itis.dao.entities.Tag;
 import ru.itis.dao.entities.User;
 import ru.itis.dao.repositories.TagRepository;
@@ -18,6 +19,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> getList(User current) {
         return tagRepository.findAll(current);
+    }
+
+    @Override
+    public List<Tag> getList(Project project) {
+        return tagRepository.findAll(project);
     }
 
     @Override

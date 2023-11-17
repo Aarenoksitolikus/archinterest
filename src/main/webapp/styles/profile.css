@@ -5,6 +5,17 @@ body{
     background-color: #e2e8f0;
 }
 
+.user-avatar {
+    margin: 0 0 1rem 0;
+}
+.user-avatar img {
+    width: 90px;
+    height: 90px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+}
+
 main {
     margin-top:60px
 }

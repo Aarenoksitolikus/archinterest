@@ -15,6 +15,7 @@ public class User {
     private String email;
     private String password;
     private Timestamp registeredAt;
+    private String avatarPath;
     private String name;
     private String patronymic;
     private String lastname;

@@ -10,14 +10,12 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @WebServlet(name = "NewsServlet", value = "/news")
 public class NewsServlet extends HttpServlet {
@@ -37,19 +35,27 @@ public class NewsServlet extends HttpServlet {
         resp.setContentType("text/html");
         HttpSession session = req.getSession();
         User current = (User) session.getAttribute("current");
-        Boolean today = (Boolean) req.getAttribute("today");
+        Cookie[] cookies = req.getCookies();
+        boolean today = false;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("today")) {
+                today = cookie.getValue().equals("on");
+            }
+        }
+
+
         List<News> news;
 
         if (current != null) {
-            req.setAttribute("author", current.getId());
-
-            if (today != null && today.equals(true)) {
+            if (today) {
+                req.setAttribute("today", true);
                 news = newsService.getAllToday(current);
             } else {
                 news = newsService.getAll(current);
             }
         } else {
-            if (today != null && today.equals(true)) {
+            if (today) {
+                req.setAttribute("today", true);
                 news = newsService.getAllToday();
             } else {
                 news = newsService.getAll();

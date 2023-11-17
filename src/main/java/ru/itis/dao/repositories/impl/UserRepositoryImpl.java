@@ -22,6 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     private final RowMapper<User> userRowMapper = (row, number) -> User.builder()
             .id(row.getLong("id"))
             .name(row.getString("name"))
+            .avatarPath(row.getString("avatar_path"))
             .patronymic(row.getString("patronymic"))
             .lastname(row.getString("lastname"))
             .username(row.getString("username"))
@@ -70,6 +71,12 @@ public class UserRepositoryImpl implements UserRepository {
             createSql = new StringBuilder(createSql.substring(0, createSql.length() - 2)).append(";");
             JdbcUtil.execute(connection, createSql.toString());
         }
+    }
+
+    @Override
+    public void update(User profile, String avatarPath) {
+        String updateSql = String.format("update account set avatar_path = '%s'", avatarPath);
+        JdbcUtil.execute(connection, updateSql);
     }
 
     @Override

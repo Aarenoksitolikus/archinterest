@@ -12,4 +12,5 @@ public interface UserRepository {
     void create(User user);
     void update(User user);
     void update(User profile, List<Tag> tags);
+    void update(User profile, String avatarPath);
 }

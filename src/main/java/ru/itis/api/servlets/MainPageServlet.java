@@ -25,6 +25,6 @@ public class MainPageServlet extends HttpServlet {
             req.setAttribute("current", current);
         }
         resp.setContentType("text/html");
-        req.getServletContext().getRequestDispatcher("/WEB-INF/templates/index.html").forward(req, resp);
+        req.getServletContext().getRequestDispatcher("/WEB-INF/templates/main.html").forward(req, resp);
     }
 }

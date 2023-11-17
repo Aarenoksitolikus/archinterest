@@ -52,7 +52,7 @@ public class AuthorizationServlet extends HttpServlet {
             resp.sendRedirect("/archinterest/arch");
         } else {
             req.setAttribute("error", "User not found :(");
-            req.getServletContext().getRequestDispatcher("/auth").forward(req, resp);
+            doGet(req, resp);
         }
     }
 }

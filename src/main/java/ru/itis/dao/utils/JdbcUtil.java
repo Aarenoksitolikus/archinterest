@@ -10,7 +10,7 @@ public class JdbcUtil<T> {
     private static Connection conn = null;
     private static final String URL = "jdbc:postgresql://localhost:5432/archinterest_db";
     private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "Fadc766e!";
+    private static final String PASSWORD = "qwerty007";
 
     public static Connection getConnection() {
         if (conn == null) {

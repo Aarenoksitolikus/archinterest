@@ -1,0 +1,14 @@
+<#import "base.html" as b>
+
+<@b.override "title">Child 1</@b.override>
+
+<!--<@b.override "header">-->
+<!--<div>Header</div>-->
+<!--</@b.override>-->
+
+<@b.override "main">
+<div>Child 1</div>
+<div name="name" id="id"></div>
+</@b.override>
+
+<@b.template />

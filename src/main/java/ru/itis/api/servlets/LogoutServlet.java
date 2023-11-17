@@ -16,7 +16,7 @@ public class LogoutServlet extends HttpServlet {
 
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("token")) {
-                cookie.setMaxAge(-1);
+                cookie.setMaxAge(0);
                 break;
             }
         }

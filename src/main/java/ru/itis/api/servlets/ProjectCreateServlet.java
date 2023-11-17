@@ -27,9 +27,9 @@ public class ProjectCreateServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         ServletContext servletContext = config.getServletContext();
-        projectService = (ProjectService) servletContext.getAttribute("projectsService");
-        userService = (UserService) servletContext.getAttribute("userService");
-        imageService = (ImageService) servletContext.getAttribute("imageService");
+        this.projectService = (ProjectService) servletContext.getAttribute("projectService");
+        this.userService = (UserService) servletContext.getAttribute("userService");
+        this.imageService = (ImageService) servletContext.getAttribute("imageService");
     }
 
     @Override
@@ -43,7 +43,11 @@ public class ProjectCreateServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        User current = (User) session.getAttribute("current");
         Project project = (Project) req.getAttribute("project");
+        project.setAuthorId(current.getId());
+        project.setAuthorUsername(current.getUsername());
         List<Image> images = (List<Image>) req.getAttribute("images");
         projectService.create(project);
         imageService.create(images);

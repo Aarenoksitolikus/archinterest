@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet(
-        urlPatterns = {"*.html"}, // need to define the type of page suffix that Freemarker parses
+        urlPatterns = {"*.html", "*.ftl", "*.ftlh"}, // need to define the type of page suffix that Freemarker parses
         loadOnStartup = 0,
         name = "templateController",
         displayName = "TemplateController",

@@ -17,7 +17,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     private static final String SELECT_ALL = "select n.*, i.file_path from news n left join image i on n.cover_path = i.file_path";
     private static final String LEFT_JOIN = " left join news_tag nt on nt.news_id = n.id";
-    private static final String WHERE_BETWEEN = " where n.created_at between %s and %s";
+    private static final String WHERE_BETWEEN = " where n.created_at between '%s' and '%s'";
     private static final String WHERE_ID = " where n.id = %s";
     private static final String WHERE_TAG_IN = " and nt.tag_id in (%s)";
     private static final String ORDER_BY = " order by created_at";

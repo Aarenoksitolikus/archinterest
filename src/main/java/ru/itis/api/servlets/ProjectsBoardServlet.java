@@ -22,7 +22,7 @@ public class ProjectsBoardServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         ServletContext servletContext = config.getServletContext();
-        projectService = (ProjectService) servletContext.getAttribute("projectsService");
+        this.projectService = (ProjectService) servletContext.getAttribute("projectService");
     }
 
     @Override

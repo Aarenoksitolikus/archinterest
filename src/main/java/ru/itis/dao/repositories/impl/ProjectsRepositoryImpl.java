@@ -22,7 +22,9 @@ public class ProjectsRepositoryImpl implements ProjectsRepository {
     private final RowMapper<Project> projectRowMapper = (row, number) -> Project.builder()
             .id(row.getLong("id"))
             .authorId(row.getLong("author_id"))
+            .authorUsername(row.getString("author_username"))
             .title(row.getString("title"))
+            .coverPath(row.getString("cover_path"))
             .content(row.getString("content"))
             .postedAt(row.getTimestamp("created_at"))
             .address(row.getString("address"))
@@ -38,15 +40,15 @@ public class ProjectsRepositoryImpl implements ProjectsRepository {
 
     @Override
     public List<Project> findAll(User current) {
-        String selectSql = String.format("select * from project p join project_tag pt on p.id = pt.project_id join account_tag at on at.account_id = %s", current.getId());
+        String selectSql = String.format("select * from project p join project_tag pt on p.id = pt.project_id left join account_tag at on at.tag_id = pt.tag_id where at.account_id = %s", current.getId());
         return jdbcUtil.selectList(connection, selectSql, projectRowMapper);
     }
 
     @Override
     public void create(Project project) {
         String address = project.getAddress() == null ? "" : project.getAddress();
-        String createSql = "insert into project (author_id, title, content, created_at, address, area, year) values (%s, '%s', '%s', now(), '%s', %s, %s))";
-        createSql = String.format(createSql, project.getAuthorId(), project.getTitle(), project.getContent(), address, project.getArea(), project.getYear());
+        String createSql = "insert into project (author_id, author_username, title, content, cover_path, created_at, address, area, year) values (%s, '%s', '%s', now(), '%s', %s, %s))";
+        createSql = String.format(createSql, project.getAuthorId(), project.getAuthorUsername(), project.getTitle(), project.getContent(), project.getCoverPath(), address, project.getArea(), project.getYear());
         JdbcUtil.execute(connection, createSql);
     }
 

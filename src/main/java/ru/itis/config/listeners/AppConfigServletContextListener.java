@@ -33,7 +33,7 @@ public class AppConfigServletContextListener implements ServletContextListener {
         NewsService newsService = new NewsServiceImpl(newsRepository);
         ProjectService projectService = new ProjectServiceImpl(projectsRepository);
         TagService tagService = new TagServiceImpl(tagRepository);
-        UserService userService = new UserServiceImpl(userRepository);
+        UserService userService = new UserServiceImpl(userRepository, imageRepository);
 
         servletContext.setAttribute("commentService", commentService);
         servletContext.setAttribute("imageService", imageService);

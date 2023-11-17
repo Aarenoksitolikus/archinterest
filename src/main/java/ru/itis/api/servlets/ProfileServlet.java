@@ -30,7 +30,7 @@ public class ProfileServlet extends HttpServlet {
         ServletContext servletContext = config.getServletContext();
         this.userService = (UserService) servletContext.getAttribute("userService");
         this.tagService = (TagService) servletContext.getAttribute("tagService");
-        this.projectService = (ProjectService) servletContext.getAttribute("projectsService");
+        this.projectService = (ProjectService) servletContext.getAttribute("projectService");
     }
 
     @Override
